@@ -32,4 +32,22 @@ router.get('/:vin', (req, res, next)=>{
     })
 })
 
+router.put("/:vin", (req, res, next)=>{
+    db("car-dealer")
+    .where({vin: req.params.vin})
+    .update(req.body)
+    .then(newCar=>{
+        if(!newCar) return res.status(404).json({message: "Car not found"});
+
+        db("car-dealer").where({vin: req.params.vin}).then(car=>{
+            res.status(200).json(car);
+        }).catch(err=>{
+            next(err);
+        })
+    }).catch(err=>{
+        console.log(err);
+        next(err);
+    })
+})
+
 module.exports = router;
