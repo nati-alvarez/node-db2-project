@@ -48,6 +48,18 @@ router.put("/:vin", (req, res, next)=>{
         console.log(err);
         next(err);
     })
-})
+});
+
+router.delete("/:vin", (req, res, next)=>{
+    db("car-dealer")
+    .where({vin: req.params.vin})
+    .del().then(carsDeleted=>{
+        if(carsDeleted < 1) return res.status(404).json({message: "Car not found"});
+        res.status(200).json({deletedVin: req.params.vin});
+    }).catch(err=>{
+        console.log(err);
+        next(err);
+    })
+});
 
 module.exports = router;
