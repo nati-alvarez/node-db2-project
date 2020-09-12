@@ -10,4 +10,14 @@ router.get("/", (req, res, next)=>{
     })
 })
 
+router.get('/:vin', (req, res, next)=>{
+    db("car-dealer")
+    .where({vin: req.params.vin})
+    .then(car=>{
+        res.status(200).json(car);
+    }).catch(err=>{
+        next(err);
+    })
+})
+
 module.exports = router;
